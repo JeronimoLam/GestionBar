@@ -25,6 +25,12 @@ function createWindow() {
   } else {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
+  if (process.env.NODE_ENV === "development") {
+    win.webContents.openDevTools({
+      mode: "detach"
+      // Abre DevTools en una ventana separada
+    });
+  }
 }
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

@@ -45,6 +45,14 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
+
+  if (process.env.NODE_ENV === 'development') {
+    win.webContents.openDevTools({
+      mode: 'detach', // Abre DevTools en una ventana separada
+    });
+    
+  }
+  
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
