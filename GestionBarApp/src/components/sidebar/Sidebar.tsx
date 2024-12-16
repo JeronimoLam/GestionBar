@@ -4,27 +4,38 @@ import { BarChart2, Package, DollarSign, Coffee, Menu } from 'react-feather';
 
 const Sidebar = ({ isExpanded, toggleSidebar }: { isExpanded: boolean; toggleSidebar: () => void }) => {
   const menuItems = [
-    { icon: BarChart2, label: 'Ver datos de mi negocio', href: '/datos' },
-    { icon: Package, label: 'Ver stock', href: '/stock' },
-    { icon: DollarSign, label: 'Ver balance', href: '/balance' },
-    { icon: Coffee, label: 'Ver y editar productos', href: '/productos' },
+    { icon: BarChart2, label: 'Datos de mi negocio', href: '/datos' },
+    { icon: Package, label: 'Stock', href: '/stock' },
+    { icon: DollarSign, label: 'Balance', href: '/balance' },
+    { icon: Coffee, label: 'Productos', href: '/productos' },
   ];
 
   return (
     <div className={`sidebar ${isExpanded ? 'expanded' : 'collapsed'}`}>
-      <button className="toggle-btn" onClick={toggleSidebar}>
-        <Menu />
-      </button>
-      <ul className="menu-list">
-        {menuItems.map(({ icon: Icon, label, href }, index) => (
-          <li key={index} className="menu-item">
-            <Link to={href} className="menu-link">
-              <Icon className="menu-icon" />
-              {isExpanded && <span className="menu-label">{label}</span>}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="icons-column">
+          <Menu className="icon-list hamburguer" onClick={toggleSidebar}/>
+        <ul className="icon-list">
+          {menuItems.map(({ icon: Icon, href }, index) => (
+            <li key={index} className="icon-item">
+              <Link to={href}>
+                <Icon className="menu-icon" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="labels-column">
+        <div className="padding-texts"></div>
+        <ul className="label-list">
+          {menuItems.map(({ label, href }, index) => (
+            <li key={index} className="label-item">
+              <Link to={href} className="menu-label-link">
+                <span className="menu-label">{label}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -1,84 +1,135 @@
+:root {
+  --main-bg-color: #f4f4f4;
+  --main-text-color: #333;
+  --sidebar-width-expanded: 250px;
+  --sidebar-width-collapsed: 60px;
+  --margin-texts: 64px;
+  --highlight-color: #646cff;
+}
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: var(--main-bg-color);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  display: flex;
+  flex-direction: row;
   transition: width 0.3s ease-in-out;
   z-index: 1000;
 }
 
 .sidebar.expanded {
-  width: 250px;
+  width: var(--sidebar-width-expanded);
 }
 
 .sidebar.collapsed {
-  width: 60px;
+  width: var(--sidebar-width-collapsed);
 }
 
-.toggle-btn {
+.icons-column {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 50px;
-  background-color: #e0e0e0;
-  border: none;
+  width: var(--sidebar-width-collapsed);
+  background-color: var(--main-bg-color);
+}
+
+.hamburguer {
+  color: var(--main-text-color);
   cursor: pointer;
-  outline: none;
-  transition: background-color 0.2s ease;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.toggle-btn:hover {
-  background-color: #d4d4d4;
+/* Rotar y cambiar color de la hamburguesa al expandir */
+.sidebar.expanded .hamburguer {
+  transform: rotate(180deg);
+  color: var(--highlight-color);
 }
 
-.menu-list {
+.icon-list {
   list-style: none;
   padding: 0;
-  margin: 0;
-  margin-top: 20px;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  transition: all 0.2s ease-in-out;
-}
-
-.sidebar.expanded .menu-item {
-  justify-content: flex-start;
-}
-
-.menu-link {
-  text-decoration: none;
-  color: #333;
-  display: flex;
-  align-items: center;
+  margin: 20px 0 0;
   width: 100%;
+}
+
+.icon-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  transition: all 0.3s ease-in-out;
+}
+
+.icon-item a {
+  color: var(--main-text-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Efecto hover en los íconos con brillo violeta */
+.icon-item a:hover .menu-icon {
+  color: var(--highlight-color);
+  text-shadow: 0 0 8px var(--highlight-color);
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.padding-texts {
+  margin-top: var(--margin-texts);
 }
 
 .menu-icon {
-  margin-right: 10px;
   font-size: 24px;
 }
 
-.sidebar.collapsed .menu-icon {
-  margin-right: 0;
+.labels-column {
+  overflow: hidden;
+  flex: 1;
+  background-color: var(--main-bg-color);
+  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Columna de textos colapsada */
+.sidebar.collapsed .labels-column {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Columna de textos expandida */
+.sidebar.expanded .labels-column {
+  width: calc(var(--sidebar-width-expanded) - var(--sidebar-width-collapsed));
+  opacity: 1;
+}
+
+.label-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+
+.label-item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Efecto hover también en el texto para mantener coherencia */
+.label-item:hover .menu-label {
+  color: var(--highlight-color);
+}
+
+.menu-label-link {
+  text-decoration: none;
+  color: var(--main-text-color);
 }
 
 .menu-label {
   font-size: 16px;
   white-space: nowrap;
-  opacity: 1;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.sidebar.collapsed .menu-label {
-  opacity: 0;
-  pointer-events: none;
 }
