@@ -73,7 +73,7 @@
 .icon-item a:hover .menu-icon {
   color: var(--highlight-color);
   text-shadow: 0 0 8px var(--highlight-color);
-  transform: scale(1.1);
+  transform: scale(1.5);
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
