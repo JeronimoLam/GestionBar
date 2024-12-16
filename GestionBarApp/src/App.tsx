@@ -31,6 +31,7 @@ function App() {
             <Route path="/stock" element={<h1>Stock</h1>} />
             <Route path="/balance" element={<h1>Balance</h1>} />
             <Route path="/productos" element={<h1>Productos</h1>} />
+            <Route path="/mesas" element={<h1>Mesas</h1>} />
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
           <div>
