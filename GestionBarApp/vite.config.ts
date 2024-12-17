@@ -3,12 +3,15 @@ import path from 'node:path'
 import electron from 'vite-plugin-electron/simple'
 import react from '@vitejs/plugin-react'
 import tsConfigPaths from "vite-tsconfig-paths"
+import commonjs from '@rollup/plugin-commonjs';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tsConfigPaths(),
+    commonjs(), // Habilita soporte para CommonJS
     electron({
       main: {
         // Shortcut of `build.lib.entry`.

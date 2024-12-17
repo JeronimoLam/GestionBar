@@ -3,11 +3,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/electron-vite.animate.svg';
 
+// Components
 import Sidebar from './components/sidebar/Sidebar';
+
+// Views
+import Productos from './views/productos/Productos.tsx'; // Importamos la nueva vista
+
 import './App.css';
 
 function App() {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [count, setCount] = useState(0);
 
 
@@ -30,7 +35,7 @@ function App() {
             <Route path="/datos" element={<h1>Datos del negocio</h1>} />
             <Route path="/stock" element={<h1>Stock</h1>} />
             <Route path="/balance" element={<h1>Balance</h1>} />
-            <Route path="/productos" element={<h1>Productos</h1>} />
+            <Route path="/productos" element={<Productos />} />
             <Route path="/mesas" element={<h1>Mesas</h1>} />
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>

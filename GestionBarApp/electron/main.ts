@@ -1,10 +1,36 @@
+import { fileURLToPath } from 'url'
+import path from 'path'
 import { app, BrowserWindow } from 'electron'
-// import { createRequire } from 'node:module'
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
+import { createRequire } from 'module'; // Importa createRequire desde el módulo 'module'
 
-// const require = createRequire(import.meta.url)
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const require = createRequire(import.meta.url); // Crea una función require compatible
+const sqlite3 = require('sqlite3').verbose(); // Importa SQLite3 usando require
+const { open } = require('sqlite');
+
+console.log("Ricardo")
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log("Filenamene: ", __filename)
+console.log("Dirnomo: ", __dirname)
+
+
+let win: BrowserWindow | null
+
+
+async function createDatabaseConnection() {
+  try {
+    const db = await open({
+      filename: path.join(__dirname, '../database.sqlite'), // Mejor forma de unir rutas
+      driver: sqlite3.Database,
+    });
+
+    console.log('Database connected successfully!');
+  } catch (error) {
+    console.error('Database Error:', error);
+  }
+}
 
 // The built directory structure
 //
@@ -24,9 +50,8 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
-let win: BrowserWindow | null
 
-function createWindow() {
+async function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
@@ -38,6 +63,9 @@ function createWindow() {
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
+
+  await createDatabaseConnection();
+
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
@@ -74,3 +102,4 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(createWindow)
+

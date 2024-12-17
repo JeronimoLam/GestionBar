@@ -1,14 +1,34 @@
+import { fileURLToPath } from "url";
+import path from "path";
 import { app, BrowserWindow } from "electron";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { createRequire } from "module";
+const require2 = createRequire(import.meta.url);
+const sqlite3 = require2("sqlite3").verbose();
+const { open } = require2("sqlite");
+console.log("Ricardo");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log("Filenamene: ", __filename);
+console.log("Dirnomo: ", __dirname);
+let win;
+async function createDatabaseConnection() {
+  try {
+    const db = await open({
+      filename: path.join(__dirname, "../database.sqlite"),
+      // Mejor forma de unir rutas
+      driver: sqlite3.Database
+    });
+    console.log("Database connected successfully!");
+  } catch (error) {
+    console.error("Database Error:", error);
+  }
+}
 process.env.APP_ROOT = path.join(__dirname, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
-let win;
-function createWindow() {
+async function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
@@ -18,6 +38,7 @@ function createWindow() {
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
   });
+  await createDatabaseConnection();
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {

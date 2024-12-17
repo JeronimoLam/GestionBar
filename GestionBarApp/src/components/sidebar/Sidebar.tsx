@@ -33,7 +33,7 @@ const Sidebar = ({ isExpanded, toggleSidebar }: { isExpanded: boolean; toggleSid
           {menuItems.map(({ label, href }, index) => (
             <li key={index} className="label-item">
               <Link to={href} className="menu-label-link">
-                <span className="menu-label">{label}</span>
+                <span className="menu-label" onClick={toggleSidebar}>{label}</span>
               </Link>
             </li>
           ))}
