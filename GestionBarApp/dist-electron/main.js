@@ -5,22 +5,28 @@ import { createRequire } from "module";
 const require2 = createRequire(import.meta.url);
 const sqlite3 = require2("sqlite3").verbose();
 const { open } = require2("sqlite");
-console.log("Ricardo");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log("Filenamene: ", __filename);
-console.log("Dirnomo: ", __dirname);
 let win;
 async function createDatabaseConnection() {
   try {
     const db = await open({
-      filename: path.join(__dirname, "../database.sqlite"),
+      filename: path.join(__dirname, "../db/database.sqlite"),
       // Mejor forma de unir rutas
       driver: sqlite3.Database
     });
-    console.log("Database connected successfully!");
+    console.log("✅ Database connected successfully!");
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL
+      )
+    `);
+    await db.run(`INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com')`);
+    console.log("✅ Table created successfully!");
   } catch (error) {
-    console.error("Database Error:", error);
+    console.error("⚠️ Database Error:", error);
   }
 }
 process.env.APP_ROOT = path.join(__dirname, "..");

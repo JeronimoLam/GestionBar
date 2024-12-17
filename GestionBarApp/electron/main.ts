@@ -8,13 +8,9 @@ const require = createRequire(import.meta.url); // Crea una función require com
 const sqlite3 = require('sqlite3').verbose(); // Importa SQLite3 usando require
 const { open } = require('sqlite');
 
-console.log("Ricardo")
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log("Filenamene: ", __filename)
-console.log("Dirnomo: ", __dirname)
-
 
 let win: BrowserWindow | null
 
@@ -22,13 +18,28 @@ let win: BrowserWindow | null
 async function createDatabaseConnection() {
   try {
     const db = await open({
-      filename: path.join(__dirname, '../database.sqlite'), // Mejor forma de unir rutas
+      filename: path.join(__dirname, '../db/database.sqlite'), // Mejor forma de unir rutas
       driver: sqlite3.Database,
     });
 
-    console.log('Database connected successfully!');
+    console.log('✅ Database connected successfully!');
+
+     // Crear una tabla de ejemplo si no existe
+     await db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL
+      )
+    `);
+
+    await db.run(`INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com')`);
+
+
+    console.log('✅ Table created successfully!');
+
   } catch (error) {
-    console.error('Database Error:', error);
+    console.error('⚠️ Database Error:', error);
   }
 }
 
