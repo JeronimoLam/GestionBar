@@ -1,4 +1,3 @@
-import React from 'react';
 import SearchBar from '../../components/searchbar/Searchbar.tsx';
 
 const Productos = () => {

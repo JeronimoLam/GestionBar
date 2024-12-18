@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/electron-vite.animate.svg';
+import {User} from './models/user.model.ts' 
+import {UserController} from './controllers/user.controller.ts' 
 
 // Components
 import Sidebar from './components/sidebar/Sidebar';
@@ -19,6 +21,14 @@ function App() {
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
+
+  const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    console.log("Aver que pasa")
+    const usuario = new User("Juan Sebastian", "tuco@jijas.com", "pass123")
+    console.log(usuario)
+
+    UserController.createUser(usuario);
+  }
 
   return (
     <Router>
@@ -40,7 +50,7 @@ function App() {
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
           <div>
-            <a href="https://electron-vite.github.io" target="_blank">
+            <a onClick={(e) => handleClick(e)}>
               <img src={viteLogo} className="logo" alt="Vite logo" />
             </a>
             <a href="https://react.dev" target="_blank">
