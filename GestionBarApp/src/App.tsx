@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/electron-vite.animate.svg';
-import {User} from './models/user.model.ts' 
-import {UserController} from './controllers/user.controller.ts' 
+// import {User} from './backend/models/user.model.ts' 
+// import ipcService from "./services/ipcService";
 
 // Components
 import Sidebar from './components/sidebar/Sidebar';
@@ -22,13 +22,32 @@ function App() {
     setIsExpanded(!isExpanded);
   };
 
-  const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    console.log("Aver que pasa")
-    const usuario = new User("Juan Sebastian", "tuco@jijas.com", "pass123")
-    console.log(usuario)
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    // e.preventDefault(); // Previene la acción predeterminada del enlace
 
-    UserController.createUser(usuario);
-  }
+    // console.log("Aver que pasa");
+    
+    // // Crear un usuario hardcodeado
+    // const usuario = {
+    //   name: "Juan Sebastian",
+    //   email: "tuco@jijas.com",
+    //   password: "pass123",
+    // };
+
+    // console.log(usuario);
+
+    // Función auxiliar para manejar la asincronía
+    // const createUser = async () => {
+    //   try {
+    //     const newUser = await ipcService.invoke("create-user", usuario);
+    //     console.log("Usuario creado:", newUser);
+    //   } catch (error) {
+    //     console.error("Error creando usuario:", error);
+    //   }
+    // };
+
+    // createUser(); // Llama a la función auxiliar
+  };
 
   return (
     <Router>
