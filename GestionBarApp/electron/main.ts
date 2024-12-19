@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
-import {createLocalDatabaseConnection} from './database.ts'
+import {createLocalDatabaseConnection} from './backend/database.ts'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,7 +34,7 @@ async function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.mjs'),
+      preload: path.join(__dirname, 'preload.ts'),
     },
   })
 

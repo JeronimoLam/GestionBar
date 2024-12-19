@@ -16,38 +16,25 @@ import './App.css';
 function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [count, setCount] = useState(0);
+  const [backendResponse, setBackendResponse] = useState<string>('Esperando datos del backend...');
 
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    // e.preventDefault(); // Previene la acción predeterminada del enlace
+  const fetchBackendData = () => {
+    if (!window.api) {
+        console.error('La API no está disponible en el contexto global.');
+        return;
+    }
 
-    // console.log("Aver que pasa");
-    
-    // // Crear un usuario hardcodeado
-    // const usuario = {
-    //   name: "Juan Sebastian",
-    //   email: "tuco@jijas.com",
-    //   password: "pass123",
-    // };
-
-    // console.log(usuario);
-
-    // Función auxiliar para manejar la asincronía
-    // const createUser = async () => {
-    //   try {
-    //     const newUser = await ipcService.invoke("create-user", usuario);
-    //     console.log("Usuario creado:", newUser);
-    //   } catch (error) {
-    //     console.error("Error creando usuario:", error);
-    //   }
-    // };
-
-    // createUser(); // Llama a la función auxiliar
-  };
+    window.api.send('getData', { id: 123 });
+    window.api.receive('dataResponse', (data) => {
+        console.log('Respuesta del backend:', data);
+        setBackendResponse(data.message);
+    });
+};
 
   return (
     <Router>
@@ -68,8 +55,14 @@ function App() {
             <Route path="/mesas" element={<h1>Mesas</h1>} />
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
+
+          <button id="fetchDataButton" onClick={fetchBackendData}>
+            Obtener Datos
+          </button>
+          <p>{backendResponse}</p>
+
           <div>
-            <a onClick={(e) => handleClick(e)}>
+            <a  href="https://vite.dev" target="_blank">
               <img src={viteLogo} className="logo" alt="Vite logo" />
             </a>
             <a href="https://react.dev" target="_blank">

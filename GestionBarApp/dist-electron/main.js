@@ -32,7 +32,7 @@ async function createWindow() {
   win = new BrowserWindow({
     icon: path$1.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
-      preload: path$1.join(__dirname, "preload.mjs")
+      preload: path$1.join(__dirname, "preload.ts")
     }
   });
   win.webContents.on("did-finish-load", () => {
