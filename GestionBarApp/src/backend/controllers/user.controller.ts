@@ -1,5 +1,5 @@
 // controllers/user.controller.ts
-import prisma from "../config/database.config.ts";
+import prisma from "../../../electron/database.config.ts";
 import {User} from "../models/user.model.ts"
 
 export class UserController {

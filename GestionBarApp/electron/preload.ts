@@ -18,7 +18,11 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
+  realizarBusqueda: (termino: string) => ipcRenderer.invoke('realizar-busqueda', termino),
+
+  
 
   // You can expose other APTs you need here.
   // ...
-})
+}
+)

@@ -1,6 +1,6 @@
 import { fileURLToPath } from "url";
 import path$1 from "path";
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { createRequire } from "module";
 const require2 = createRequire(import.meta.url);
@@ -62,7 +62,26 @@ app.on("activate", () => {
     createWindow();
   }
 });
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  ipcMain.handle("realizar-busqueda", async (event, termino) => {
+    try {
+      const resultados = await prisma.user.findMany(
+        //   {
+        //   where: {
+        //     campo: {
+        //       contains: termino,
+        //     },
+        //   },
+        // }
+      );
+      return resultados;
+    } catch (error) {
+      console.error("Error en la búsqueda:", error);
+      return [];
+    }
+  });
+});
 export {
   MAIN_DIST,
   RENDERER_DIST,

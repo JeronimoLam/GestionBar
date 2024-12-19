@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import {createLocalDatabaseConnection} from './database.ts'
+// import prisma from './database.config.ts'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,5 +81,25 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow();
+
+  ipcMain.handle('realizar-busqueda', async (event, termino) => {
+    try {
+      const resultados = await prisma.user.findMany(
+      //   {
+      //   where: {
+      //     campo: {
+      //       contains: termino,
+      //     },
+      //   },
+      // }
+    );
+      return resultados;
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+      return [];
+    }
+  });
+})
 
