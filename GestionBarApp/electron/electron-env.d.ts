@@ -22,6 +22,19 @@ declare namespace NodeJS {
 }
 
 // Used in Renderer process, expose in `preload.ts`
-interface Window {
-  ipcRenderer: import('electron').IpcRenderer
+// interface Window {
+//   ipcRenderer: import('electron').IpcRenderer
+// }
+
+declare global {
+  interface Window {
+    electronAPI: {
+      sendMessage: (message: string) => void;
+      onReceiveReply: (callback: (event: any, reply: string) => void) => void;
+    };
+  }
 }
+
+
+
+

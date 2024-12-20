@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
-import { createLocalDatabaseConnection } from './backend/database'
+// import { createLocalDatabaseConnection } from './backend/database'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +43,7 @@ async function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
 
-  await createLocalDatabaseConnection(__dirname);
+  // await createLocalDatabaseConnection(__dirname);
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)

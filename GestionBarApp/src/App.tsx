@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/electron-vite.animate.svg';
 // import {User} from './backend/models/user.model.ts' 
-// import ipcService from "./services/ipcService";
+// import ipcService from "./services/ipcService"; 
 
 // Components
 import Sidebar from './components/sidebar/Sidebar';
@@ -17,24 +17,40 @@ function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [count, setCount] = useState(0);
   const [backendResponse, setBackendResponse] = useState<string>('Esperando datos del backend...');
+  const [message, setMessage] = useState('');
 
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const fetchBackendData = () => {
-    if (!window.api) {
-        console.error('La API no está disponible en el contexto global.');
-        return;
-    }
+//   const fetchBackendData = () => {
+//     if (!window.electronAPI) {
+//         console.error('La API no está disponible en el contexto global.');
+//         return;
+//     }
 
-    window.api.send('getData', { id: 123 });
-    window.api.receive('dataResponse', (data) => {
-        console.log('Respuesta del backend:', data);
-        setBackendResponse(data.message);
-    });
-};
+//     window.electronAPI.sendMessage('data test');
+//     // window.api.receive('dataResponse', (data) => {
+//     //     console.log('Respuesta del backend:', data);
+//     //     setBackendResponse(data.message);
+//     // });
+// };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setMessage('');
+
+
+      if (window.electronAPI) {
+        window.electronAPI.sendMessage(message);
+      } else {
+        console.error('electronAPI is not available');
+      }
+      setMessage('');
+    };
+
 
   return (
     <Router>
@@ -56,10 +72,9 @@ function App() {
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
 
-          <button id="fetchDataButton" onClick={fetchBackendData}>
-            Obtener Datos
-          </button>
-          <p>{backendResponse}</p>
+          <button type="submit" onSubmit={() => handleSubmit()} className="bg-blue-500 text-white p-2 rounded">
+          Enviar al Backend
+        </button>
 
           <div>
             <a  href="https://vite.dev" target="_blank">
