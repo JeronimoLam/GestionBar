@@ -1,47 +1,61 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/electron-vite.animate.svg';
-// import {User} from './backend/models/user.model.ts' 
-// import ipcService from "./services/ipcService"; 
+/// <reference path="../electron/electron-env.d.ts" />
+
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/electron-vite.animate.svg";
+// import {User} from './backend/models/user.model.ts'
+// import ipcService from "./services/ipcService";
 
 // Components
-import Sidebar from './components/sidebar/Sidebar';
+import Sidebar from "./components/sidebar/Sidebar";
 
 // Views
-import Productos from './views/productos/Productos.tsx'; // Importamos la nueva vista
+import Productos from "./views/productos/Productos.tsx"; // Importamos la nueva vista
 
-import './App.css';
+import "./App.css";
 
 function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [count, setCount] = useState(0);
-  const [backendResponse, setBackendResponse] = useState<string>('Esperando datos del backend...');
-  const [message, setMessage] = useState('');
+  const [backendResponse, setBackendResponse] = useState<string>(
+    "Esperando datos del backend..."
+  );
 
+  useEffect(() => {
+    if (window.electronAPI) {
+      window.electronAPI.onReceiveReply((event: any, response: string) => {
+        setBackendResponse(response);
+      });
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const handleSubmit = () => {
+  const createBDButton = () => {
     // e.preventDefault();
 
-    const mensaje = "Carlos";
+    if (window.electronAPI) {
+      window.electronAPI.initBD();
+      // window.electronAPI.sendMessage(mensaje);
+      console.log("Message SENT: initBD");
+    } else {
+      console.error("electronAPI is not available");
+    }
+  };
 
-    console.log("Hola");
-    console.log(window);
+  const sendmessage = () => {
+    const mensaje = "save-data";
 
-      if (window.electronAPI) {
-        window.electronAPI.sendMessage(mensaje);
-        console.log('Message SENT: ', mensaje);
-
-      } else {
-        console.error('electronAPI is not available');
-      }
-      setMessage('');
-    };
-
+    if (window.electronAPI) {
+      window.electronAPI.sendMessage(mensaje);
+      console.log("Message SENT: ", mensaje);
+    } else {
+      console.error("electronAPI is not available");
+    }
+  };
 
   return (
     <Router>
@@ -49,9 +63,9 @@ function App() {
         <Sidebar isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
         <div
           style={{
-            marginLeft: isExpanded ? '250px' : '60px',
-            padding: '20px',
-            transition: 'margin-left 0.3s ease-in-out',
+            marginLeft: isExpanded ? "250px" : "60px",
+            padding: "20px",
+            transition: "margin-left 0.3s ease-in-out",
           }}
         >
           <Routes>
@@ -63,12 +77,25 @@ function App() {
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
 
-          <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white p-2 rounded">
-          Enviar al Backend
-        </button>
+          <button
+            type="submit"
+            onClick={createBDButton}
+            className="bg-blue-500 text-white p-2 rounded"
+          >
+            crear BD
+          </button>
+          <button
+            type="submit"
+            onClick={sendmessage}
+            className="bg-blue-500 text-white p-2 rounded"
+          >
+            Enviar mensaje Backend
+          </button>
+
+          <p>{backendResponse}</p>
 
           <div>
-            <a  href="https://vite.dev" target="_blank">
+            <a href="https://vite.dev" target="_blank">
               <img src={viteLogo} className="logo" alt="Vite logo" />
             </a>
             <a href="https://react.dev" target="_blank">

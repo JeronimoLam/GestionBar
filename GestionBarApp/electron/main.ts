@@ -1,12 +1,13 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { allIpcHandlers } from './icpHandlers/index'
 // import { createLocalDatabaseConnection } from './backend/database'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(typeof(__dirname))
+console.log(typeof (__dirname))
 
 let win: BrowserWindow | null
 
@@ -51,25 +52,9 @@ async function createWindow() {
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
 
-   // Configurar el manejo de mensajes
-   ipcMain.on('send-message', (event, message) => {
-    console.log('Mensaje recibido en el proceso principal:', message)
-    
-    // Aquí puedes agregar la lógica para manejar diferentes tipos de mensajes
-    switch (message) {
-      case 'get-data':
-        // Ejemplo: obtener datos y enviarlos de vuelta al renderer
-        event.reply('receive-reply', 'Aquí están los datos solicitados')
-        break
-      case 'save-data':
-        // Ejemplo: guardar datos
-        event.reply('receive-reply', 'Datos guardados correctamente')
-        break
-      default:
-        // Para cualquier otro mensaje
-        event.reply('receive-reply', `Mensaje recibido: ${message}`)
-    }
-  })
+  // Configurar los manejadores de IPC
+  allIpcHandlers(ipcMain, __filename, __dirname);
+
 
   if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools({
