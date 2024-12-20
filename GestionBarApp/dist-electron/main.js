@@ -1,6 +1,6 @@
-import { fileURLToPath } from "url";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import { app, BrowserWindow } from "electron";
+import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log(typeof __dirname);
@@ -28,6 +28,19 @@ async function createWindow() {
   } else {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
+  ipcMain.on("send-message", (event, message) => {
+    console.log("Mensaje recibido en el proceso principal:", message);
+    switch (message) {
+      case "get-data":
+        event.reply("receive-reply", "Aquí están los datos solicitados");
+        break;
+      case "save-data":
+        event.reply("receive-reply", "Datos guardados correctamente");
+        break;
+      default:
+        event.reply("receive-reply", `Mensaje recibido: ${message}`);
+    }
+  });
   if (process.env.NODE_ENV === "development") {
     win.webContents.openDevTools({
       mode: "detach"

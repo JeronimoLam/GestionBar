@@ -26,25 +26,29 @@ function App() {
 
 //   const fetchBackendData = () => {
 //     if (!window.electronAPI) {
-//         console.error('La API no está disponible en el contexto global.');
+//         console.error('La electronAPI no está disponible en el contexto global.');
 //         return;
 //     }
 
 //     window.electronAPI.sendMessage('data test');
-//     // window.api.receive('dataResponse', (data) => {
+//     // window.electronAPI.receive('dataResponse', (data) => {
 //     //     console.log('Respuesta del backend:', data);
 //     //     setBackendResponse(data.message);
 //     // });
 // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
 
-    setMessage('');
+    const mensaje = "Carlos";
 
+    console.log("Hola");
+    console.log(window);
 
       if (window.electronAPI) {
-        window.electronAPI.sendMessage(message);
+        window.electronAPI.sendMessage(mensaje);
+        console.log('Message SENT: ', mensaje);
+
       } else {
         console.error('electronAPI is not available');
       }
@@ -72,7 +76,7 @@ function App() {
             <Route path="/" element={<h1>Bienvenido a la aplicación</h1>} />
           </Routes>
 
-          <button type="submit" onSubmit={() => handleSubmit()} className="bg-blue-500 text-white p-2 rounded">
+          <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white p-2 rounded">
           Enviar al Backend
         </button>
 
