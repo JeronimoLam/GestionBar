@@ -1,6 +1,6 @@
-"use strict";
-const { contextBridge, ipcRenderer } = require("electron");
-contextBridge.exposeInMainWorld("api", {
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('api', {
   send: (channel, data) => {
     ipcRenderer.send(channel, data);
   },
@@ -8,3 +8,4 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on(channel, (event, ...args) => callback(...args));
   }
 });
+

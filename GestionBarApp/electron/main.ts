@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
-import {createLocalDatabaseConnection} from './backend/database.ts'
+import { createLocalDatabaseConnection } from './backend/database'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,7 +10,6 @@ console.log(typeof(__dirname))
 
 let win: BrowserWindow | null
 
-
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -18,23 +17,24 @@ let win: BrowserWindow | null
 // │ │
 // │ ├─┬ dist-electron
 // │ │ ├── main.js
-// │ │ └── preload.mjs
+// │ │ └── preload.js
 // │
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
-export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
+const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
-
 
 async function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.ts'),
+      preload: path.join(__dirname, './preload.mjs'), // Changed from preload.ts to preload.js
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   })
 
@@ -45,21 +45,17 @@ async function createWindow() {
 
   await createLocalDatabaseConnection(__dirname);
 
-
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
-    // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
 
   if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools({
-      mode: 'detach', // Abre DevTools en una ventana separada
+      mode: 'detach', // Opens DevTools in a separate window
     });
-    
   }
-  
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common

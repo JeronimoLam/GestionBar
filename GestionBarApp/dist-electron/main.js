@@ -25,14 +25,17 @@ console.log(typeof __dirname);
 let win;
 process.env.APP_ROOT = path$1.join(__dirname, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
-const MAIN_DIST = path$1.join(process.env.APP_ROOT, "dist-electron");
+path$1.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path$1.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path$1.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
 async function createWindow() {
   win = new BrowserWindow({
     icon: path$1.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
-      preload: path$1.join(__dirname, "preload.ts")
+      preload: path$1.join(__dirname, "./preload.mjs"),
+      // Changed from preload.ts to preload.js
+      contextIsolation: true,
+      nodeIntegration: false
     }
   });
   win.webContents.on("did-finish-load", () => {
@@ -47,7 +50,7 @@ async function createWindow() {
   if (process.env.NODE_ENV === "development") {
     win.webContents.openDevTools({
       mode: "detach"
-      // Abre DevTools en una ventana separada
+      // Opens DevTools in a separate window
     });
   }
 }
@@ -63,8 +66,3 @@ app.on("activate", () => {
   }
 });
 app.whenReady().then(createWindow);
-export {
-  MAIN_DIST,
-  RENDERER_DIST,
-  VITE_DEV_SERVER_URL
-};
