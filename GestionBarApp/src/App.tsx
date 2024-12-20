@@ -24,19 +24,6 @@ function App() {
     setIsExpanded(!isExpanded);
   };
 
-//   const fetchBackendData = () => {
-//     if (!window.electronAPI) {
-//         console.error('La electronAPI no está disponible en el contexto global.');
-//         return;
-//     }
-
-//     window.electronAPI.sendMessage('data test');
-//     // window.electronAPI.receive('dataResponse', (data) => {
-//     //     console.log('Respuesta del backend:', data);
-//     //     setBackendResponse(data.message);
-//     // });
-// };
-
   const handleSubmit = () => {
     // e.preventDefault();
 

@@ -22,6 +22,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/**/*", "electron", "src/backend/mosrc/backend/controllerstrollers", "src/backend/config", "./src/types/types.d.ts"],
+  "include": ["src", "src/**/*", "electron", "src/backend/mosrc/backend/controllerstrollers", "src/backend/config", "./src/types/types.d.ts", "models"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
